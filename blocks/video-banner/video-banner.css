@@ -1,29 +1,49 @@
-/**
- * video-banner.css — Estilos del bloque video-banner
- * Mobile-first. BEM para nomenclatura de clases.
- * Variables CSS de :root (definidas en styles/styles.css).
- *
- * Generado por SA-D02 del Sprint 2 — Red Agéntica AEM
- */
-
-/* ── Contenedor principal ── */
 .video-banner {
-  display: block;
+  display: none;
+}
+
+@media (width >=768px) {
+  .video-banner {
+    display: block;
+    padding: 5rem 2rem;
+  }
+}
+
+.video-banner-placeholder {
+  margin: auto;
+  max-width: 100%;
+}
+
+@media (width >=768px) {
+  .video-banner-placeholder {
+    overflow: hidden;
+    border-radius: 2rem;
+  }
+}
+
+@media (width >=1200px) {
+  .video-banner-placeholder {
+    max-width: 1200px;
+  }
+}
+
+@media (width >=1440px) {
+  .video-banner-placeholder {
+    max-width: 1400px;
+  }
+}
+
+.video-banner .video-banner-placeholder .video-js {
   width: 100%;
-  max-width: var(--max-width, 1200px);
-  margin: 0 auto;
-  padding: var(--spacing-m, 1rem);
-  color: var(--color-text, #333333);
-  font-family: var(--font-body, sans-serif);
+  aspect-ratio: 16 / 9;
 }
 
-/* ── Estado de inicialización ── */
-.video-banner--initialized {
-  animation: none;
+.video-banner .video-banner-placeholder .video-js .vjs-big-play-button {
+  background-color: #009ad8 !important;
 }
 
-/* ── Elementos internos (BEM) ── */
-.video-banner__item {
-  padding: var(--spacing-s, 0.5rem);
+.video-banner .video-banner-placeholder video {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
 }
-

@@ -11,15 +11,32 @@
  * @param {HTMLElement} block - El elemento raíz del bloque en el DOM
  */
 export default function decorate(block) {
-  if (!block) return;
+  const cells = [...block.querySelectorAll(':scope > div > div')];
+  const videoId = cells[0]?.textContent?.trim() || '6392232090112';
+  const accountId = cells[1]?.textContent?.trim() || '6236382021001';
+  const playerId = cells[2]?.textContent?.trim() || 'Jdfh8iZrx5';
 
   // Añadir clase de inicialización para CSS transitions
   block.classList.add('video-banner--initialized');
 
-  // Implementación genérica — añadir lógica específica del componente
-  const items = block.querySelectorAll(':scope > div');
-  items.forEach((item, index) => {
-    item.classList.add('video-banner__item');
-    item.setAttribute('data-index', index);
-  });
+  const placeholder = document.createElement('div');
+  placeholder.className = 'video-banner-placeholder';
+
+  const videoEl = document.createElement('video-js');
+  videoEl.setAttribute('data-video-id', videoId);
+  videoEl.setAttribute('data-account', accountId);
+  videoEl.setAttribute('data-player', playerId);
+  videoEl.setAttribute('data-embed', 'default');
+  videoEl.setAttribute('controls', '');
+  videoEl.setAttribute('data-application-id', '');
+  videoEl.setAttribute('data-setup', JSON.stringify({ fluid: true }));
+  videoEl.className = 'video-js vjs-fluid vjs-16-9';
+
+  placeholder.appendChild(videoEl);
+  block.appendChild(placeholder);
+
+  const script = document.createElement('script');
+  script.src = `https://players.brightcove.net/${accountId}/${playerId}_default/index.min.js`;
+  script.async = true;
+  document.head.appendChild(script);
 }

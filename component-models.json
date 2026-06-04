@@ -700,5 +700,16 @@
         "label": "Contenido"
       }
     ]
+  },
+  {
+    "id": "video-banner",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "content",
+        "label": "Contenido"
+      }
+    ]
   }
 ]
