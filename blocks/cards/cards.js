@@ -32,8 +32,9 @@ export default function decorate(block) {
 
     if (idx === 0) {
       // First row: Title and description
-      const title = cols[0] ? cols[0].innerHTML : '<h2>Elige el préstamo</h2>';
-      const desc = cols[1] ? cols[1].innerHTML : '';
+      const titleText = cols[0]?.textContent.trim();
+      const title = (titleText && titleText !== '1') ? cols[0].innerHTML : '<h2>Elige el préstamo que mejor se adapte a ti</h2>';
+      const desc = cols[1] ? cols[1].innerHTML : '<p>En MicroBank encontrarás productos de financiación a medida para que hagas realidad todos <span class="font-site texto_subrayado">tus proyectos.</span></p>';
       descriptionHtml = `
         <div data-aos="fade-up" class="hl-carousel__description-text aos-fast-mobile">
           ${title}
@@ -72,6 +73,31 @@ export default function decorate(block) {
       });
     }
   });
+
+  // If no items were parsed, or there's only 1 row (which was treated as description),
+  // populate with fallback/mock items
+  if (items.length === 0) {
+    for (let i = 0; i < 4; i += 1) {
+      items.push({
+        imgSrc: TEST_IMAGE_URL,
+        title: 'Lorem ipsum dolor sit amet consectetur',
+        tag: 'Lorem Ipsum',
+        nri: 'Lorem Ipsum',
+        href: '#',
+        srLabel: 'Lorem Ipsum',
+      });
+    }
+  }
+
+  // Ensure descriptionHtml is set if rows was empty
+  if (!descriptionHtml) {
+    descriptionHtml = `
+      <div data-aos="fade-up" class="hl-carousel__description-text aos-fast-mobile">
+        <h2>Elige el préstamo que mejor se adapte a ti</h2>
+        <p>En MicroBank encontrarás productos de financiación a medida para que hagas realidad todos <span class="font-site texto_subrayado">tus proyectos.</span></p>
+      </div>
+    `;
+  }
 
   // 1. Build Description
   const descContainer = document.createElement('div');
@@ -121,13 +147,13 @@ export default function decorate(block) {
   });
   highlightsDiv.appendChild(wrap);
 
-  // 3. Build view all link
-  if (viewAllLink) {
-    const linkDiv = document.createElement('div');
-    linkDiv.className = 'hl-carousel__highlights-link';
-    linkDiv.innerHTML = `<p><a href="${viewAllLink.href}" title="${viewAllLink.title || viewAllLink.textContent}">${viewAllLink.textContent}</a></p>`;
-    highlightsDiv.appendChild(linkDiv);
-  }
+  // 3. Build view all link (use fallback if no link was authored)
+  const href = viewAllLink ? viewAllLink.href : '#';
+  const text = viewAllLink ? viewAllLink.textContent : 'Ver todos los productos';
+  const linkDiv = document.createElement('div');
+  linkDiv.className = 'hl-carousel__highlights-link';
+  linkDiv.innerHTML = `<p><a href="${href}" title="${text}">${text}</a></p>`;
+  highlightsDiv.appendChild(linkDiv);
 
   section.appendChild(highlightsDiv);
   block.appendChild(section);
